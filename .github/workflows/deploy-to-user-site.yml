@@ -39,7 +39,7 @@ jobs:
         run: |
           shopt -s extglob
           rm -rf !(.git|CNAME|README.md) || true
-          if [ -d "_site/dist" ]; then cp -r _site/dist/* .; else cp -r _site/build/* .; fi
+          cp -r _site/dist/* .
       - name: Commit & push
         run: |
           git config user.name "gh-actions"
