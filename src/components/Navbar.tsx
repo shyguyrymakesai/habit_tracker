@@ -1,10 +1,7 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 
-interface NavbarProps {
-  currentPage?: string;
-}
-
-export const Navbar: React.FC<NavbarProps> = ({ currentPage }) => {
+export const Navbar: React.FC = () => {
   const navItems = [
     { path: '/', label: 'Home' },
     { path: '/habits', label: 'Habits' },
@@ -23,8 +20,13 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage }) => {
       </div>
       <ul className="navbar-menu">
         {navItems.map((item) => (
-          <li key={item.path} className={currentPage === item.path ? 'active' : ''}>
-            <a href={item.path}>{item.label}</a>
+          <li key={item.path}>
+            <NavLink 
+              to={item.path}
+              className={({ isActive }) => isActive ? 'active' : ''}
+            >
+              {item.label}
+            </NavLink>
           </li>
         ))}
       </ul>

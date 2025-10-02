@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
-// Import pages
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+
+// Pages
 import { Home } from './pages/Home';
 import { Trends } from './pages/Trends';
 import { History } from './pages/History';
@@ -11,73 +13,35 @@ import { HabitSettings } from './pages/HabitSettings';
 import { MedicationSettings } from './pages/MedicationSettings';
 import { RatingSettings } from './pages/RatingSettings';
 import { Quotes } from './pages/Quotes';
+
+// Components
 import { Navbar } from './components/Navbar';
 
-// Hash-based routing for GitHub Pages compatibility
 function App() {
-  // Use hash instead of pathname
-  const getHashPath = () => {
-    const hash = window.location.hash.slice(1); // Remove the '#'
-    return hash || '/';
-  };
-
-  const [currentPage, setCurrentPage] = React.useState(getHashPath());
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case '/':
-        return <Home />;
-      case '/habits':
-        return <HabitSettings />;
-      case '/medications':
-        return <MedicationSettings />;
-      case '/ratings':
-        return <RatingSettings />;
-      case '/quotes':
-        return <Quotes />;
-      case '/trends':
-        return <Trends />;
-      case '/history':
-        return <History />;
-      case '/settings':
-        return <Settings />;
-      default:
-        return <Home />;
-    }
-  };
-
-  // Hash-based navigation handler
-  React.useEffect(() => {
-    const handleNavigation = (e: MouseEvent) => {
-      const target = e.target as HTMLAnchorElement;
-      if (target.tagName === 'A' && target.href.startsWith(window.location.origin)) {
-        e.preventDefault();
-        const path = target.getAttribute('href') || '/';
-        setCurrentPage(path);
-        window.location.hash = path;
-      }
-    };
-
-    const handleHashChange = () => {
-      setCurrentPage(getHashPath());
-    };
-
-    document.addEventListener('click', handleNavigation);
-    window.addEventListener('hashchange', handleHashChange);
-    
-    return () => {
-      document.removeEventListener('click', handleNavigation);
-      window.removeEventListener('hashchange', handleHashChange);
-    };
-  }, []);
-
   return (
-    <div className="app">
-      <Navbar currentPage={currentPage} />
-      <main className="main-content">
-        {renderPage()}
-      </main>
-    </div>
+    <HashRouter>
+      <div className="app">
+        <Navbar />
+        <main className="main-content">
+          <Routes>
+            {/* root */}
+            <Route path="/" element={<Home />} />
+            {/* demo landing route for https://shyguyrymakesai.github.io/demo/#/demo */}
+            <Route path="/demo" element={<Home />} />
+            {/* app routes */}
+            <Route path="/habits" element={<HabitSettings />} />
+            <Route path="/medications" element={<MedicationSettings />} />
+            <Route path="/ratings" element={<RatingSettings />} />
+            <Route path="/quotes" element={<Quotes />} />
+            <Route path="/trends" element={<Trends />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/settings" element={<Settings />} />
+            {/* catch-all → home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
+      </div>
+    </HashRouter>
   );
 }
 
