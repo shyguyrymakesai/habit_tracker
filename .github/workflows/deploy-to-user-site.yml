@@ -1,0 +1,51 @@
+name: Build & Publish to user site
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: web
+          path: |
+            dist
+            build
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: shyguyrymakesai/shyguyrymakesai.github.io
+          token: ${{ secrets.PAT_PUSH }} # create a classic PAT with repo scope, save in app repo secrets
+      - uses: actions/download-artifact@v4
+        with:
+          name: web
+          path: _site
+      - name: Copy built files to site root
+        run: |
+          shopt -s extglob
+          rm -rf !(.git|CNAME) || true
+          if [ -d "_site/dist" ]; then cp -r _site/dist/* .; else cp -r _site/build/* .; fi
+          # HashRouter doesn't need a 404.html, but adding one is harmless
+          if [ -f "index.html" ]; then cp index.html 404.html; fi
+      - name: Commit & push
+        run: |
+          git config user.name "gh-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git commit -m "Deploy site from app build" || echo "No changes"
+          git push
