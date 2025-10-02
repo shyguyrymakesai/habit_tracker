@@ -17,6 +17,7 @@ interface TrendChartProps {
   data: Array<{ date: string; value: number }>;
   title?: string;
   color?: string;
+  domain?: [number, number];
 }
 
 interface ScatterPoint {
@@ -107,11 +108,13 @@ export const TrendChart: React.FC<TrendChartProps> = ({
   data,
   title = 'Trend',
   color = '#3b82f6',
+  domain,
 }) => {
   const scatterPoints = useMemo<ScatterPoint[]>(
     () => {
       const points = data.map((point) => {
-        const dateObj = new Date(point.date + 'T00:00:00');
+        const [year, month, day] = point.date.split('-').map(Number);
+        const dateObj = new Date(year, month - 1, day);
         const epoch = dateObj.getTime();
         return {
           x: epoch,
@@ -126,6 +129,78 @@ export const TrendChart: React.FC<TrendChartProps> = ({
   );
 
   const trendLine = useMemo<TrendPoint[]>(() => computeTrendLine(scatterPoints), [scatterPoints]);
+
+  const computedDomain = useMemo<[number, number] | undefined>(() => {
+    if (domain) {
+      return domain;
+    }
+
+    if (scatterPoints.length === 0) {
+      return undefined;
+    }
+
+    const values = scatterPoints.map((p) => p.x);
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    if (min === max) {
+      const padding = 24 * 60 * 60 * 1000;
+      return [min - padding, max + padding];
+    }
+    const padding = Math.round((max - min) * 0.02);
+    return [min - padding, max + padding];
+  }, [domain, scatterPoints]);
+
+  const xTicks = useMemo<number[] | undefined>(() => {
+    const activeDomain = domain ?? computedDomain;
+    if (!activeDomain) return undefined;
+
+    const [start, end] = activeDomain;
+    const ticks: Set<number> = new Set();
+    const dayMs = 24 * 60 * 60 * 1000;
+    const spanDays = Math.ceil((end - start) / dayMs);
+    
+    // Determine tick interval based on range
+    let tickInterval = 1;
+    if (spanDays > 180) {
+      tickInterval = 30; // Monthly for year view
+    } else if (spanDays > 60) {
+      tickInterval = 7; // Weekly for longer month views
+    } else if (spanDays > 14) {
+      tickInterval = 3; // Every 3 days for month view
+    } else {
+      tickInterval = 1; // Daily for week view
+    }
+    
+    // Generate ticks at regular intervals from domain start
+    let current = new Date(start);
+    current.setHours(0, 0, 0, 0);
+    
+    let dayCount = 0;
+    while (current.getTime() <= end) {
+      if (dayCount % tickInterval === 0 || current.getTime() === start) {
+        ticks.add(current.getTime());
+      }
+      current = new Date(current.getTime() + dayMs);
+      dayCount++;
+    }
+    
+    // Always include the end date
+    const endOfDay = new Date(end);
+    endOfDay.setHours(0, 0, 0, 0);
+    if (endOfDay.getTime() >= start) {
+      ticks.add(endOfDay.getTime());
+    }
+    
+    // ALSO include all dates where we have actual data points
+    scatterPoints.forEach(point => {
+      const pointDate = new Date(point.x);
+      pointDate.setHours(0, 0, 0, 0);
+      ticks.add(pointDate.getTime());
+    });
+    
+    // Convert to sorted array
+    return Array.from(ticks).sort((a, b) => a - b);
+  }, [domain, computedDomain, scatterPoints]);
 
   const yDomain = useMemo<[number, number]>(() => {
     if (scatterPoints.length === 0) {
@@ -154,14 +229,16 @@ export const TrendChart: React.FC<TrendChartProps> = ({
           <p style={{ color: '#6b7280' }}>Not enough data to display this trend yet.</p>
         ) : (
           <ResponsiveContainer width="100%" height={320}>
-            <ScatterChart margin={{ top: 20, right: 30, bottom: 10, left: 10 }}>
+            <ScatterChart margin={{ top: 20, right: 16, bottom: 10, left: 16 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
                 type="number"
                 dataKey="x"
-                domain={['dataMin', 'dataMax']}
+                domain={domain ?? computedDomain ?? ['dataMin', 'dataMax']}
+                scale="time"
                 tickFormatter={(value) => dateFormatter.format(new Date(value))}
                 name="Date"
+                ticks={xTicks}
               />
               <YAxis type="number" dataKey="y" domain={yDomain} name="Value" />
               <Tooltip cursor={{ strokeDasharray: '3 3' }} content={renderTooltip} />

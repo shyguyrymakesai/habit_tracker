@@ -23,9 +23,17 @@ const COLOR_PALETTE = [
   '#ec4899', // pink
 ];
 
+const formatDateKey = (date: Date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export const Trends: React.FC = () => {
   const [timeRange, setTimeRange] = useState<RangeOption>('month');
   const [ratingSeries, setRatingSeries] = useState<Array<{ rating: Rating; data: Array<{ date: string; value: number }> }>>([]);
+  const [xDomain, setXDomain] = useState<[number, number] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -48,16 +56,19 @@ export const Trends: React.FC = () => {
       }
 
       const now = new Date();
+      const endMs = Date.now();
       const startDate = new Date(now);
+      startDate.setHours(0, 0, 0, 0);
       if (range === 'week') {
-        startDate.setDate(now.getDate() - 6);
+        startDate.setDate(startDate.getDate() - 6);
       } else if (range === 'month') {
-        startDate.setDate(now.getDate() - 29);
+        startDate.setDate(startDate.getDate() - 29);
       } else {
-        startDate.setFullYear(now.getFullYear() - 1);
+        startDate.setFullYear(startDate.getFullYear() - 1);
       }
 
-      const startString = startDate.toISOString().split('T')[0];
+  const startString = formatDateKey(startDate);
+      setXDomain([startDate.getTime(), endMs]);
 
       const filtered = entries
         .filter((entry) => entry.date >= startString)
@@ -115,6 +126,7 @@ export const Trends: React.FC = () => {
               key={rating.id}
               data={data}
               color={COLOR_PALETTE[index % COLOR_PALETTE.length]}
+              domain={xDomain ?? undefined}
               title={`${rating.icon ? `${rating.icon} ` : ''}${rating.name} (${RANGE_LABELS[timeRange]})`}
             />
           ))}
