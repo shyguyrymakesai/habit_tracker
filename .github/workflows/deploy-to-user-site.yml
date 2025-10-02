@@ -4,24 +4,45 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+env:
+  # Directory containing package.json (repo root)
+  APP_DIR: .
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
-      - run: npm run build
-      - name: Upload build artifact
+          cache-dependency-path: ${{ env.APP_DIR }}/package-lock.json
+
+      - name: Install deps
+        working-directory: ${{ env.APP_DIR }}
+        run: npm ci
+
+      - name: Build
+        working-directory: ${{ env.APP_DIR }}
+        run: npm run build
+
+      - name: Show build tree (debug)
+        run: |
+          echo "== Repo root =="
+          ls -la
+          echo "== App dir =="
+          ls -la "${APP_DIR}"
+          echo "== Build candidates =="
+          find "${APP_DIR}" -type d -regex '.*/\(dist\|build\)$' -maxdepth 3 -print
+
+      - name: Upload build artifact (dist in APP_DIR)
         uses: actions/upload-artifact@v4
         with:
           name: web
-          path: |
-            dist
-            build
+          path: ${{ env.APP_DIR }}/dist
+          if-no-files-found: error
 
   publish:
     needs: build
@@ -39,27 +60,35 @@ jobs:
           name: web
           path: _site
 
-      - name: Publish built files to site root
+      - name: Detect build dir inside artifact
+        id: detect
         run: |
-          set -e
-          shopt -s extglob
-          echo "Cleaning site root (preserving .git, CNAME, README.md)…"
-          rm -rf !(.git|CNAME|README.md) || true
-
-          if [ -d "_site/dist" ]; then
-            echo "Copying from _site/dist"
-            cp -r _site/dist/* .
-          elif [ -d "_site/build" ]; then
-            echo "Copying from _site/build"
-            cp -r _site/build/* .
-          else
-            echo "ERROR: No dist/ or build/ directory found in artifact."
+          echo "Artifact layout:"
+          ls -la _site || true
+          # find first dist/ or build/ directory
+          BUILD_DIR=$(find _site -type d -regex '.*/\(dist\|build\)$' -print | head -n 1)
+          echo "Detected BUILD_DIR: $BUILD_DIR"
+          if [ -z "$BUILD_DIR" ]; then
+            echo "No dist/ or build/ found in artifact."
             exit 1
           fi
+          echo "BUILD_DIR=$BUILD_DIR" >> $GITHUB_OUTPUT
 
-          # SPA + Pages helpers
-          if [ -f "index.html" ]; then cp index.html 404.html; fi
-          touch .nojekyll
+      - name: Publish built files to demo directory
+        run: |
+          set -e
+          TARGET_DIR=demo
+
+          echo "Resetting $TARGET_DIR directory"
+          rm -rf "$TARGET_DIR"
+          mkdir -p "$TARGET_DIR"
+
+          echo "Copying from ${{ steps.detect.outputs.BUILD_DIR }}"
+          cp -r "${{ steps.detect.outputs.BUILD_DIR }}"/* "$TARGET_DIR"/
+
+          # GitHub Pages helpers scoped to demo
+          if [ -f "$TARGET_DIR/index.html" ]; then cp "$TARGET_DIR/index.html" "$TARGET_DIR/404.html"; fi
+          touch "$TARGET_DIR/.nojekyll"
 
       - name: Commit & push
         run: |
