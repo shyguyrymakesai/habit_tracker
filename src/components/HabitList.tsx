@@ -46,23 +46,31 @@ export const HabitList: React.FC<HabitListProps> = ({ value, onChange }) => {
             ...log, 
             completed: !log.completed,
             // If uncompleting a time-based habit, clear minutes
-            minutes: habit.isTimeBased && !log.completed ? 0 : log.minutes
+            minutes: habit.isTimeBased && log.completed ? undefined : log.minutes
           }
         : log
     );
     onChange(updatedLogs);
   };
 
-  const handleMinutesChange = (habitId: string, minutes: number) => {
-    const updatedLogs = value.map(log =>
-      log.habitId === habitId
-        ? { 
-            ...log, 
-            minutes: Math.max(0, minutes),
-            completed: minutes > 0 // Auto-check if minutes > 0
-          }
-        : log
-    );
+  const handleMinutesChange = (habitId: string, rawValue: string) => {
+    const sanitizedValue = rawValue === '' ? undefined : Math.max(0, Number(rawValue) || 0);
+
+    const updatedLogs = value.map(log => {
+      if (log.habitId !== habitId) {
+        return log;
+      }
+
+      const minutes = sanitizedValue;
+      const completed = minutes !== undefined && minutes > 0;
+
+      return {
+        ...log,
+        minutes,
+        completed,
+      };
+    });
+
     onChange(updatedLogs);
   };
 
@@ -170,8 +178,8 @@ export const HabitList: React.FC<HabitListProps> = ({ value, onChange }) => {
                       type="number"
                       min="0"
                       max="999"
-                      value={log.minutes || 0}
-                      onChange={(e) => handleMinutesChange(habit.id, parseInt(e.target.value) || 0)}
+                      value={log.minutes === undefined ? '' : log.minutes}
+                      onChange={(e) => handleMinutesChange(habit.id, e.target.value)}
                       placeholder="0"
                       className="minutes-input"
                     />

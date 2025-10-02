@@ -12,10 +12,20 @@ const RANGE_LABELS: Record<RangeOption, string> = {
   year: 'Past 365 Days',
 };
 
+const COLOR_PALETTE = [
+  '#3b82f6', // blue
+  '#f97316', // orange
+  '#10b981', // green
+  '#ef4444', // red
+  '#8b5cf6', // purple
+  '#f59e0b', // amber
+  '#14b8a6', // teal
+  '#ec4899', // pink
+];
+
 export const Trends: React.FC = () => {
   const [timeRange, setTimeRange] = useState<RangeOption>('month');
-  const [chartData, setChartData] = useState<Array<{ date: string; value: number }>>([]);
-  const [activeRating, setActiveRating] = useState<Rating | null>(null);
+  const [ratingSeries, setRatingSeries] = useState<Array<{ rating: Rating; data: Array<{ date: string; value: number }> }>>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -30,17 +40,12 @@ export const Trends: React.FC = () => {
         getAllRatings(),
       ]);
 
-      if (ratings.length === 0) {
-        setActiveRating(null);
-        setChartData([]);
+      const activeRatings = ratings.filter((rating) => rating.active !== false);
+
+      if (activeRatings.length === 0) {
+        setRatingSeries([]);
         return;
       }
-
-      const primaryRating = ratings.find(
-        (rating) => ['mood', 'energy', 'focus'].includes(rating.name.toLowerCase())
-      ) || ratings[0];
-
-      setActiveRating(primaryRating);
 
       const now = new Date();
       const startDate = new Date(now);
@@ -58,22 +63,28 @@ export const Trends: React.FC = () => {
         .filter((entry) => entry.date >= startString)
         .sort((a, b) => a.date.localeCompare(b.date));
 
-      const dataPoints = filtered
-        .map((entry) => {
-          const log = entry.ratings.find((rating) => rating.ratingId === primaryRating.id);
-          if (!log) return null;
-          return {
-            date: entry.date,
-            value: log.value,
-          };
-        })
-        .filter((point): point is { date: string; value: number } => point !== null);
+      const trendSeries = activeRatings.map((rating) => {
+        const dataPoints = filtered
+          .map((entry) => {
+            const log = entry.ratings.find((ratingLog) => ratingLog.ratingId === rating.id);
+            if (!log) return null;
+            return {
+              date: entry.date,
+              value: log.value,
+            };
+          })
+          .filter((point): point is { date: string; value: number } => point !== null);
 
-      setChartData(dataPoints);
+        return {
+          rating,
+          data: dataPoints,
+        };
+      });
+
+      setRatingSeries(trendSeries);
     } catch (error) {
       console.error('Failed to load trend data:', error);
-      setActiveRating(null);
-      setChartData([]);
+      setRatingSeries([]);
     } finally {
       setIsLoading(false);
     }
@@ -97,13 +108,16 @@ export const Trends: React.FC = () => {
 
       {isLoading ? (
         <p>Loading trend data...</p>
-      ) : activeRating ? (
+      ) : ratingSeries.length > 0 ? (
         <div className="charts-container">
-          <TrendChart
-            data={chartData}
-            title={`${activeRating.icon ? `${activeRating.icon} ` : ''}${activeRating.name} (${RANGE_LABELS[timeRange]})`}
-          />
-          {/* Additional charts can be added here */}
+          {ratingSeries.map(({ rating, data }, index) => (
+            <TrendChart
+              key={rating.id}
+              data={data}
+              color={COLOR_PALETTE[index % COLOR_PALETTE.length]}
+              title={`${rating.icon ? `${rating.icon} ` : ''}${rating.name} (${RANGE_LABELS[timeRange]})`}
+            />
+          ))}
         </div>
       ) : (
         <p>No ratings available to display trends yet.</p>
