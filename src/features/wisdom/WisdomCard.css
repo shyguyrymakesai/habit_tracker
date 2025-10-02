@@ -163,24 +163,22 @@
   font-style: italic;
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .wisdom-card,
-  .weekly-koans-card {
-    background: var(--bg-secondary, #1a1a1a);
-  }
+/* Force light theme styling regardless of system preference */
+.wisdom-card,
+.weekly-koans-card {
+  background: var(--bg-secondary, #ffffff);
+}
 
-  .wisdom-source-label,
-  .wisdom-title,
-  .wisdom-text,
-  .weekly-koans-title,
-  .weekly-koan-item {
-    color: var(--text-primary, #e0e0e0);
-  }
+.wisdom-source-label,
+.wisdom-title,
+.wisdom-text,
+.weekly-koans-title,
+.weekly-koan-item {
+  color: var(--text-primary, #111827);
+}
 
-  .wisdom-meta,
-  .wisdom-ref,
-  .wisdom-attribution {
-    color: var(--text-secondary, #a0a0a0);
-  }
+.wisdom-meta,
+.wisdom-ref,
+.wisdom-attribution {
+  color: var(--text-secondary, #6b7280);
 }

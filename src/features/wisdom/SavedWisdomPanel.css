@@ -99,26 +99,23 @@
   font-style: italic;
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .saved-wisdom-panel {
-    background: var(--bg-secondary, #1a1a1a);
-  }
+.saved-wisdom-panel {
+  background: var(--bg-secondary, #ffffff);
+}
 
-  .saved-wisdom-title,
-  .saved-wisdom-item-title,
-  .saved-wisdom-text {
-    color: var(--text-primary, #e0e0e0);
-  }
+.saved-wisdom-item {
+  background: var(--bg-tertiary, #f3f4f6);
+  border-color: var(--border-color, #e5e7eb);
+}
 
-  .saved-wisdom-empty,
-  .saved-wisdom-meta,
-  .saved-wisdom-date {
-    color: var(--text-secondary, #a0a0a0);
-  }
+.saved-wisdom-title,
+.saved-wisdom-item-title,
+.saved-wisdom-text {
+  color: var(--text-primary, #111827);
+}
 
-  .saved-wisdom-item {
-    background: var(--bg-tertiary, #2a2a2a);
-    border-color: var(--border-color, #404040);
-  }
+.saved-wisdom-empty,
+.saved-wisdom-meta,
+.saved-wisdom-date {
+  color: var(--text-secondary, #6b7280);
 }
