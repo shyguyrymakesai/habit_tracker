@@ -1,0 +1,124 @@
+.saved-wisdom-panel {
+  background: var(--bg-secondary, #ffffff);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.saved-wisdom-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-primary, #333);
+}
+
+.saved-wisdom-empty {
+  color: var(--text-secondary, #666);
+  font-size: 0.95rem;
+  text-align: center;
+  padding: 2rem 1rem;
+  opacity: 0.7;
+}
+
+.saved-wisdom-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.saved-wisdom-item {
+  background: var(--bg-tertiary, #f9f9f9);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.saved-wisdom-item:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.saved-wisdom-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.saved-wisdom-source {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+.saved-wisdom-remove {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary, #666);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.saved-wisdom-remove:hover {
+  background: var(--danger-bg, #fee);
+  color: var(--danger-color, #c00);
+}
+
+.saved-wisdom-item-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary, #333);
+}
+
+.saved-wisdom-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+  white-space: pre-wrap;
+  color: var(--text-primary, #333);
+}
+
+.saved-wisdom-meta {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  color: var(--text-secondary, #666);
+  margin-bottom: 0.5rem;
+}
+
+.saved-wisdom-date {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  color: var(--text-secondary, #666);
+  font-style: italic;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .saved-wisdom-panel {
+    background: var(--bg-secondary, #1a1a1a);
+  }
+
+  .saved-wisdom-title,
+  .saved-wisdom-item-title,
+  .saved-wisdom-text {
+    color: var(--text-primary, #e0e0e0);
+  }
+
+  .saved-wisdom-empty,
+  .saved-wisdom-meta,
+  .saved-wisdom-date {
+    color: var(--text-secondary, #a0a0a0);
+  }
+
+  .saved-wisdom-item {
+    background: var(--bg-tertiary, #2a2a2a);
+    border-color: var(--border-color, #404040);
+  }
+}

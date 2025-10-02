@@ -23,6 +23,7 @@ export const HabitSettings: React.FC = () => {
     name: '',
     icon: '',
     isTimeBased: false,
+    weeklyGoalMinutes: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -40,7 +41,7 @@ export const HabitSettings: React.FC = () => {
   };
 
   const resetForm = () => {
-    setFormData({ name: '', icon: '', isTimeBased: false });
+    setFormData({ name: '', icon: '', isTimeBased: false, weeklyGoalMinutes: '' });
     setErrors({});
     setIsAdding(false);
     setEditingId(null);
@@ -49,11 +50,16 @@ export const HabitSettings: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const weeklyGoal = formData.weeklyGoalMinutes.trim() 
+      ? parseInt(formData.weeklyGoalMinutes) 
+      : undefined;
+
     const habit: Habit = {
       id: editingId || uuidv4(),
       name: formData.name.trim(),
       icon: formData.icon.trim() || undefined,
       isTimeBased: formData.isTimeBased,
+      weeklyGoalMinutes: weeklyGoal,
       active: true,
       createdAt: new Date().toISOString(),
     };
@@ -86,6 +92,7 @@ export const HabitSettings: React.FC = () => {
       name: habit.name,
       icon: habit.icon || '',
       isTimeBased: habit.isTimeBased,
+      weeklyGoalMinutes: habit.weeklyGoalMinutes?.toString() || '',
     });
     setEditingId(habit.id);
     setIsAdding(true);
@@ -191,6 +198,25 @@ export const HabitSettings: React.FC = () => {
             </p>
           </div>
 
+          {formData.isTimeBased && (
+            <div className="form-group">
+              <label htmlFor="weeklyGoal">Weekly Goal (minutes)</label>
+              <input
+                type="number"
+                id="weeklyGoal"
+                value={formData.weeklyGoalMinutes}
+                onChange={(e) => setFormData({ ...formData, weeklyGoalMinutes: e.target.value })}
+                placeholder="e.g., 150"
+                min="0"
+                className={errors.weeklyGoalMinutes ? 'error' : ''}
+              />
+              {errors.weeklyGoalMinutes && <span className="error-message">{errors.weeklyGoalMinutes}</span>}
+              <p className="form-hint">
+                Optional: Set a weekly target in minutes (e.g., 150 minutes = 2.5 hours per week)
+              </p>
+            </div>
+          )}
+
           <div className="form-actions">
             <button type="button" onClick={resetForm} className="btn-secondary">
               Cancel
@@ -216,6 +242,12 @@ export const HabitSettings: React.FC = () => {
                     {habit.name}
                     {habit.isTimeBased && <span className="time-badge">⏱️ Time-based</span>}
                   </h4>
+                  {habit.isTimeBased && habit.weeklyGoalMinutes && (
+                    <p className="habit-goal">
+                      Weekly goal: {habit.weeklyGoalMinutes} minutes
+                      {habit.weeklyGoalMinutes >= 60 && ` (${(habit.weeklyGoalMinutes / 60).toFixed(1)} hrs)`}
+                    </p>
+                  )}
                 </div>
                 <div className="habit-card-actions">
                   <button

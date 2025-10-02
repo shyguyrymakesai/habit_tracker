@@ -10,6 +10,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage }) => {
     { path: '/habits', label: 'Habits' },
     { path: '/medications', label: 'Medications' },
     { path: '/ratings', label: 'Ratings' },
+    { path: '/quotes', label: 'Quotes' },
     { path: '/trends', label: 'Trends' },
     { path: '/history', label: 'History' },
     { path: '/settings', label: 'Settings' },

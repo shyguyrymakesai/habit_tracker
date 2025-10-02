@@ -1,0 +1,66 @@
+[
+  {
+    "id": "poetry:rumi-1",
+    "source": "poetry",
+    "text": "The wound is the place where the Light enters you.",
+    "attribution": "Rumi"
+  },
+  {
+    "id": "poetry:rumi-2",
+    "source": "poetry",
+    "text": "Let yourself be silently drawn by the strange pull of what you really love. It will not lead you astray.",
+    "attribution": "Rumi"
+  },
+  {
+    "id": "poetry:basho-1",
+    "source": "poetry",
+    "title": "Old Pond",
+    "text": "An old silent pond\nA frog jumps into the pond—\nSplash! Silence again.",
+    "attribution": "Matsuo Bashō"
+  },
+  {
+    "id": "poetry:basho-2",
+    "source": "poetry",
+    "title": "Autumn Moon",
+    "text": "Autumn moonlight—\na worm digs silently\ninto the chestnut.",
+    "attribution": "Matsuo Bashō"
+  },
+  {
+    "id": "poetry:hafiz-1",
+    "source": "poetry",
+    "text": "Even after all this time, the sun never says to the earth, 'You owe me.' Look what happens with a love like that. It lights the whole sky.",
+    "attribution": "Hafiz"
+  },
+  {
+    "id": "poetry:issa-1",
+    "source": "poetry",
+    "title": "Spring Rain",
+    "text": "A world of dew,\nAnd within every dewdrop\nA world of struggle.",
+    "attribution": "Kobayashi Issa"
+  },
+  {
+    "id": "poetry:whitman-1",
+    "source": "poetry",
+    "text": "I exist as I am, that is enough.",
+    "attribution": "Walt Whitman",
+    "ref": "Song of Myself"
+  },
+  {
+    "id": "poetry:ryokan-1",
+    "source": "poetry",
+    "text": "The wind has settled, the blossoms have fallen;\nBirds sing, the mountains grow dark—\nThis is the wondrous power of Buddhism.",
+    "attribution": "Ryōkan"
+  },
+  {
+    "id": "poetry:dickinson-1",
+    "source": "poetry",
+    "text": "Forever is composed of nows.",
+    "attribution": "Emily Dickinson"
+  },
+  {
+    "id": "poetry:rumi-3",
+    "source": "poetry",
+    "text": "Stop acting so small. You are the universe in ecstatic motion.",
+    "attribution": "Rumi"
+  }
+]

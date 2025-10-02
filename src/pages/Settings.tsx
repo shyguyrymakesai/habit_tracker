@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { WisdomSettingsPanel } from '../features/wisdom/WisdomSettings';
+import { SavedWisdomPanel } from '../features/wisdom/SavedWisdomPanel';
 
 export const Settings: React.FC = () => {
   const [settings, setSettings] = useState({
@@ -65,6 +67,14 @@ export const Settings: React.FC = () => {
             <option value="monday">Monday</option>
           </select>
         </div>
+      </section>
+
+      <section className="settings-section">
+        <WisdomSettingsPanel />
+      </section>
+
+      <section className="settings-section">
+        <SavedWisdomPanel />
       </section>
 
       <section className="settings-section">

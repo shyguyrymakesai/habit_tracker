@@ -5,12 +5,15 @@ import { DailyEntry, Rating } from '../lib/schemas';
 import { saveEntry, getEntry } from '../lib/db';
 import { getToday } from '../lib/dates';
 import { getActiveRatings } from '../lib/ratings';
+import { useDailyWisdom } from '../features/wisdom/useDailyWisdom';
+import { WisdomCard, WeeklyKoansList } from '../features/wisdom/WisdomCard';
 
 export const Home: React.FC = () => {
   const [todayEntry, setTodayEntry] = useState<DailyEntry | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [saveMessage, setSaveMessage] = useState<string>('');
   const [activeRatings, setActiveRatings] = useState<Rating[]>([]);
+  const { today: dailyWisdom, weeklyKoans, loading: wisdomLoading, refresh: refreshWisdom } = useDailyWisdom();
 
   useEffect(() => {
     loadInitialData();
@@ -118,6 +121,9 @@ export const Home: React.FC = () => {
           {saveMessage}
         </div>
       )}
+
+      {!wisdomLoading && dailyWisdom && <WisdomCard item={dailyWisdom} onRefresh={refreshWisdom} />}
+      {!wisdomLoading && weeklyKoans.length > 0 && <WeeklyKoansList items={weeklyKoans} />}
 
       {todayEntry && featuredRatings.length > 0 && (
         <div className="metrics-grid">

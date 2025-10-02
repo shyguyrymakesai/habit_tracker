@@ -10,6 +10,7 @@ import { Settings } from './pages/Settings';
 import { HabitSettings } from './pages/HabitSettings';
 import { MedicationSettings } from './pages/MedicationSettings';
 import { RatingSettings } from './pages/RatingSettings';
+import { Quotes } from './pages/Quotes';
 import { Navbar } from './components/Navbar';
 
 // Simple routing (you can replace with react-router later)
@@ -26,6 +27,8 @@ function App() {
         return <MedicationSettings />;
       case '/ratings':
         return <RatingSettings />;
+      case '/quotes':
+        return <Quotes />;
       case '/trends':
         return <Trends />;
       case '/history':

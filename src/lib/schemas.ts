@@ -33,6 +33,7 @@ export const HabitSchema = z.object({
   name: z.string().min(1).max(100),
   icon: z.string().max(10).optional(), // emoji or icon
   isTimeBased: z.boolean().default(false), // true for time-based activities (minutes)
+  weeklyGoalMinutes: z.number().min(0).optional(), // weekly goal in minutes for time-based habits
   active: z.boolean().default(true),
   createdAt: z.string().datetime(),
 });
