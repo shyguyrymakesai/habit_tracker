@@ -12,32 +12,55 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: npm
       - run: npm ci
       - run: npm run build
-      - name: Upload build
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: web
-          path: dist
+          path: |
+            dist
+            build
 
   publish:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout site repo
+        uses: actions/checkout@v4
         with:
           repository: shyguyrymakesai/shyguyrymakesai.github.io
-          token: ${{ secrets.PAT_PUSH }} # create a classic PAT with repo scope, save in app repo secrets
-      - uses: actions/download-artifact@v4
+          token: ${{ secrets.PAT_PUSH }}
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
         with:
           name: web
-          path: dist
-      - name: Copy built files to demo subfolder
+          path: _site
+
+      - name: Publish built files to site root
         run: |
-          mkdir -p demo
-          rm -rf demo/*
-          cp -r dist/* demo/
+          set -e
+          shopt -s extglob
+          echo "Cleaning site root (preserving .git, CNAME, README.md)…"
+          rm -rf !(.git|CNAME|README.md) || true
+
+          if [ -d "_site/dist" ]; then
+            echo "Copying from _site/dist"
+            cp -r _site/dist/* .
+          elif [ -d "_site/build" ]; then
+            echo "Copying from _site/build"
+            cp -r _site/build/* .
+          else
+            echo "ERROR: No dist/ or build/ directory found in artifact."
+            exit 1
+          fi
+
+          # SPA + Pages helpers
+          if [ -f "index.html" ]; then cp index.html 404.html; fi
+          touch .nojekyll
+
       - name: Commit & push
         run: |
           git config user.name "gh-actions"
