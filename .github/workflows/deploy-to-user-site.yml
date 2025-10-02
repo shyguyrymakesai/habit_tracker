@@ -33,11 +33,11 @@ jobs:
         with:
           name: web
           path: dist
-      - name: Copy built files to site root
+      - name: Copy built files to demo subfolder
         run: |
-          shopt -s extglob
-          rm -rf !(.git|CNAME|README.md) || true
-          cp -r dist/* .
+          mkdir -p demo
+          rm -rf demo/*
+          cp -r dist/* demo/
       - name: Commit & push
         run: |
           git config user.name "gh-actions"

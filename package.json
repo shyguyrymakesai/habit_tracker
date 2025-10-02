@@ -2,7 +2,7 @@
   "name": "habit-tracker",
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://shyguyrymakesai.github.io",
+  "homepage": "https://shyguyrymakesai.github.io/demo",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
