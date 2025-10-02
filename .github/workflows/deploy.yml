@@ -1,0 +1,46 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout app repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Checkout user site repo
+        uses: actions/checkout@v4
+        with:
+          repository: shyguyrymakesai/shyguyrymakesai.github.io
+          path: site-repo
+          token: ${{ secrets.PAT_PUSH }}
+
+      - name: Copy build to user site repo
+        run: |
+          mkdir -p site-repo/habit_tracker
+          rm -rf site-repo/habit_tracker/*
+          cp -r dist/* site-repo/habit_tracker/
+
+      - name: Commit and push to user site
+        run: |
+          cd site-repo
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Deploy habit_tracker from ${{ github.sha }}" && git push)

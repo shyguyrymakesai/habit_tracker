@@ -2,6 +2,8 @@
 
 A comprehensive personal habit tracking application built with React, TypeScript, and Vite. Track your daily habits, medications, custom ratings, and gain insights from your data with beautiful visualizations.
 
+🌐 **Live Demo**: [https://shyguyrymakesai.github.io/habit_tracker](https://shyguyrymakesai.github.io/habit_tracker)
+
 ## ✨ Features
 
 ### 🎯 **Daily Tracking**
@@ -92,6 +94,14 @@ npm run build
 ```
 
 The built files will be in the `dist` directory.
+
+### Deploy to GitHub Pages
+
+```bash
+npm run deploy
+```
+
+Or push to the `main` branch and GitHub Actions will automatically build and deploy.
 
 ### Preview Production Build
 

@@ -13,9 +13,15 @@ import { RatingSettings } from './pages/RatingSettings';
 import { Quotes } from './pages/Quotes';
 import { Navbar } from './components/Navbar';
 
-// Simple routing (you can replace with react-router later)
+// Hash-based routing for GitHub Pages compatibility
 function App() {
-  const [currentPage, setCurrentPage] = React.useState(window.location.pathname);
+  // Use hash instead of pathname
+  const getHashPath = () => {
+    const hash = window.location.hash.slice(1); // Remove the '#'
+    return hash || '/';
+  };
+
+  const [currentPage, setCurrentPage] = React.useState(getHashPath());
 
   const renderPage = () => {
     switch (currentPage) {
@@ -40,7 +46,7 @@ function App() {
     }
   };
 
-  // Simple navigation handler
+  // Hash-based navigation handler
   React.useEffect(() => {
     const handleNavigation = (e: MouseEvent) => {
       const target = e.target as HTMLAnchorElement;
@@ -48,20 +54,20 @@ function App() {
         e.preventDefault();
         const path = target.getAttribute('href') || '/';
         setCurrentPage(path);
-        window.history.pushState({}, '', path);
+        window.location.hash = path;
       }
     };
 
-    const handlePopState = () => {
-      setCurrentPage(window.location.pathname);
+    const handleHashChange = () => {
+      setCurrentPage(getHashPath());
     };
 
     document.addEventListener('click', handleNavigation);
-    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handleHashChange);
     
     return () => {
       document.removeEventListener('click', handleNavigation);
-      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handleHashChange);
     };
   }, []);
 

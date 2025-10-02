@@ -2,24 +2,27 @@
   "name": "habit-tracker",
   "version": "1.0.0",
   "type": "module",
+  "homepage": "https://shyguyrymakesai.github.io/habit_tracker",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
+    "localforage": "^1.10.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "recharts": "^2.12.7",
-    "localforage": "^1.10.0",
-    "zod": "^3.23.8",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@types/uuid": "^9.0.8",
     "@vitejs/plugin-react": "^4.3.1",
+    "gh-pages": "^6.3.0",
     "typescript": "^5.5.4",
     "vite": "^5.4.3"
   }
