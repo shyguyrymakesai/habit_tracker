@@ -96,6 +96,7 @@ jobs:
           # GitHub Pages helpers scoped to demo
           if [ -f "$TARGET_DIR/index.html" ]; then cp "$TARGET_DIR/index.html" "$TARGET_DIR/404.html"; fi
           touch "$TARGET_DIR/.nojekyll"
+          touch .nojekyll
 
       - name: Commit & push
         run: |
