@@ -19,9 +19,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: web
-          path: |
-            dist
-            build
+          path: dist
 
   publish:
     needs: build
@@ -34,12 +32,12 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: web
-          path: _site
+          path: dist
       - name: Copy built files to site root
         run: |
           shopt -s extglob
           rm -rf !(.git|CNAME|README.md) || true
-          cp -r _site/dist/* .
+          cp -r dist/* .
       - name: Commit & push
         run: |
           git config user.name "gh-actions"
