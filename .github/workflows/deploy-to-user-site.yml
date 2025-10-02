@@ -35,13 +35,11 @@ jobs:
         with:
           name: web
           path: _site
-      - name: Copy built files to site root
+      - name: Copy built files to habit_tracker subfolder
         run: |
-          shopt -s extglob
-          rm -rf !(.git|CNAME) || true
-          if [ -d "_site/dist" ]; then cp -r _site/dist/* .; else cp -r _site/build/* .; fi
-          # HashRouter doesn't need a 404.html, but adding one is harmless
-          if [ -f "index.html" ]; then cp index.html 404.html; fi
+          mkdir -p habit_tracker
+          rm -rf habit_tracker/*
+          if [ -d "_site/dist" ]; then cp -r _site/dist/* habit_tracker/; else cp -r _site/build/* habit_tracker/; fi
       - name: Commit & push
         run: |
           git config user.name "gh-actions"
