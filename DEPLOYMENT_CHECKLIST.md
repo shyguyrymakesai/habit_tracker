@@ -1,6 +1,6 @@
 # ✅ Deployment Checklist
 
-Follow these steps in order to deploy your Habit Tracker to `shyguyrymakesai.github.io/habit_tracker/`
+Follow these steps in order to deploy your Habit Tracker to `shyguyrymakesai.github.io/demo/`
 
 ## Prerequisites
 
@@ -56,10 +56,10 @@ Follow these steps in order to deploy your Habit Tracker to `shyguyrymakesai.git
 ### Step 4: Verify
 
 - [ ] Check the user site repo for new files:
-      https://github.com/shyguyrymakesai/shyguyrymakesai.github.io/tree/main/habit_tracker
+  https://github.com/shyguyrymakesai/shyguyrymakesai.github.io/tree/main/demo
       
 - [ ] Visit your live site:
-      https://shyguyrymakesai.github.io/habit_tracker/#/
+  https://shyguyrymakesai.github.io/demo/#/
       
 - [ ] Test navigation:
   - [ ] Home page loads
@@ -80,13 +80,13 @@ Follow these steps in order to deploy your Habit Tracker to `shyguyrymakesai.git
 
 ### Build succeeds but site doesn't update
 - [ ] Check commits in the user site repo
-- [ ] Look for `/habit_tracker/` folder in user site repo
+- [ ] Look for `/demo/` folder in user site repo
 - [ ] Verify GitHub Pages is enabled on user site
 - [ ] Wait a few minutes for Pages to rebuild
 
 ### 404 Error on live site
-- [ ] Check `base: '/habit_tracker/'` in `vite.config.ts`
-- [ ] Verify files are in `/habit_tracker/` folder in user site repo
+- [ ] Check `base: './'` in `vite.config.ts`
+- [ ] Verify files are in `/demo/` folder in user site repo
 - [ ] Check GitHub Pages settings on user site repo
 
 ## Ongoing Usage
@@ -104,10 +104,10 @@ Once set up, deployment is automatic:
 |------|-------|
 | Source Repo | `shyguyrymakesai/habit_tracker` |
 | Target Repo | `shyguyrymakesai/shyguyrymakesai.github.io` |
-| Target Folder | `/habit_tracker/` |
+| Target Folder | `/demo/` |
 | Secret Name | `PAT_PUSH` |
-| Live URL | `https://shyguyrymakesai.github.io/habit_tracker/#/` |
-| Workflow File | `.github/workflows/deploy.yml` |
+| Live URL | `https://shyguyrymakesai.github.io/demo/#/` |
+| Workflow File | `.github/workflows/deploy-to-user-site.yml` |
 
 ---
 

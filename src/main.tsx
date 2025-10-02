@@ -26,8 +26,9 @@ function App() {
           <Routes>
             {/* root */}
             <Route path="/" element={<Home />} />
-            {/* demo landing route for https://shyguyrymakesai.github.io/demo/#/demo */}
+            {/* demo landing routes so both #/demo and #/demo/ work */}
             <Route path="/demo" element={<Home />} />
+            <Route path="demo" element={<Home />} />
             {/* app routes */}
             <Route path="/habits" element={<HabitSettings />} />
             <Route path="/medications" element={<MedicationSettings />} />
