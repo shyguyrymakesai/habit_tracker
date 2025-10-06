@@ -8,6 +8,10 @@ yarn.lock
 dist/
 .vite/
 
+# Capacitor native platforms (regenerated from source)
+android/
+ios/
+
 # Logs
 npm-debug.log*
 yarn-debug.log*
