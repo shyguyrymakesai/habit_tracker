@@ -4,6 +4,46 @@ A comprehensive personal habit tracking application built with React, TypeScript
 
 🌐 **Live Demo**: [https://shyguyrymakesai.github.io/habit_tracker](https://shyguyrymakesai.github.io/habit_tracker)
 
+## 📱 PWA Usage
+
+### Install as App
+This is a **Progressive Web App (PWA)** that can be installed on your device:
+
+**Desktop (Chrome/Edge):**
+1. Visit the live demo
+2. Look for the install icon (⊕) in the address bar
+3. Click "Install Habit Tracker"
+4. App opens in its own window like a native app
+
+**Mobile (iOS/Android):**
+1. Visit the live demo
+2. Tap the browser menu (⋮ or share icon)
+3. Select "Add to Home Screen" or "Install app"
+4. App icon appears on your home screen
+5. Opens fullscreen without browser UI
+
+### Offline Support
+Once installed, the app **works completely offline**:
+- ✅ All pages load without internet
+- ✅ Track habits, medications, and ratings offline
+- ✅ View your history and trends
+- ✅ Daily wisdom shows cached quotes
+- ✅ Auto-syncs when back online
+
+**Test Offline:**
+1. Install the app
+2. Turn off Wi-Fi/mobile data
+3. Open the app - everything still works!
+4. Turn network back on - fresh wisdom quotes load
+
+### Hash Routing
+The app uses hash-based routing for compatibility with static hosting:
+- Home: `/#/`
+- Demo: `/#/demo`
+- Habits: `/#/habits`
+- Trends: `/#/trends`
+- All routes work offline!
+
 ## ✨ Features
 
 ### 🎯 **Daily Tracking**
