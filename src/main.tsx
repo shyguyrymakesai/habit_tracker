@@ -26,9 +26,6 @@ function App() {
           <Routes>
             {/* root */}
             <Route path="/" element={<Home />} />
-            {/* demo landing routes so both #/demo and #/demo/ work */}
-            <Route path="/demo" element={<Home />} />
-            <Route path="demo" element={<Home />} />
             {/* app routes */}
             <Route path="/habits" element={<HabitSettings />} />
             <Route path="/medications" element={<MedicationSettings />} />

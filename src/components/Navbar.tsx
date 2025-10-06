@@ -6,7 +6,6 @@ export const Navbar: React.FC = () => {
 
   const navItems = [
     { path: '/', label: 'Home' },
-    { path: '/demo', label: 'Demo' },
     { path: '/habits', label: 'Habits' },
     { path: '/medications', label: 'Medications' },
     { path: '/ratings', label: 'Ratings' },
